@@ -47,11 +47,12 @@ def myrange2(*args):
     """
     start, stop, step = _get_arguments(*args)
     out = []
-    condition = {
-        '+': lambda: start < stop,
-        '-': lambda: start > stop }
-    flag = '+' if step > 0 else '-'
-    while condition[flag]():
+    #condition = {
+    #    '+': lambda: start < stop,
+    #    '-': lambda: start > stop }
+    #flag = '+' if step > 0 else '-'
+    #while condition[flag]():
+    while start < stop if step > 0 else start > stop:
         out.append(start)
         start += step
     return out
@@ -61,11 +62,12 @@ def myrange3(*args):
     """Custom range function, returns generator.
     """
     start, stop, step = _get_arguments(*args)
-    condition = {
-        '+': lambda: start < stop,
-        '-': lambda: start > stop }
-    flag = '+' if step > 0 else '-'
-    while condition[flag]():
+    #condition = {
+    #    '+': lambda: start < stop,
+    #    '-': lambda: start > stop }
+    #flag = '+' if step > 0 else '-'
+    #while condition[flag]():
+    while start < stop if step > 0 else start > stop:
         yield start
         start += step
 
