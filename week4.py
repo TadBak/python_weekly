@@ -34,12 +34,15 @@ class LogDicts:
                       'request': 'No request found'}
         return output
 
+    def _sorting_choice(self, obj, key):
+        if key:
+            return (item for item in sorted(obj, key=key))
+        else:
+            return obj
+    
     def iterdicts(self, key=None):
         out = (self._line_to_dict(line) for line in self._log_lines)
-        if key:
-            return sorted(out, key=key)
-        else:
-            return out
+        return self._sorting_choice(out, key)
 
     def dicts(self, key=None):
         out = [self._line_to_dict(line) for line in self._log_lines]
@@ -70,18 +73,12 @@ class LogDicts:
     def for_ip(self, ip_address, key=None):
         out = (self._line_to_dict(line) for line in self._log_lines 
                if self._line_to_dict(line)['ip_address'] == ip_address)
-        if key:
-            return sorted(out, key=key)
-        else:
-            return out
+        return self._sorting_choice(out, key)
 
     def for_request(self, text, key=None):
         out = (self._line_to_dict(line) for line in self._log_lines 
                if text in self._line_to_dict(line)['request'])
-        if key:
-            return sorted(out, key=key)
-        else:
-            return out
+        return self._sorting_choice(out, key)
 
 
 
