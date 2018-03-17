@@ -7,7 +7,7 @@ class Tee:
     """
 
     def __init__(self, *args):
-        self.outs = [fileobj for fileobj in args]
+        self.outs = args
 
     def write(self, str):
         for fileobj in self.outs:
