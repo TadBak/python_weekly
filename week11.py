@@ -17,7 +17,7 @@ class Tee:
         self.write(str + '\n')
 
     def __enter__(self):
-        pass
+        return self
 
     def __exit__(self, type, value, traceback):
         for fileobj in self.outs:
