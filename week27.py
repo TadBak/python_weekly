@@ -19,7 +19,6 @@ def show_files(directory=None):
 def list_directory(path):
     files_list = []
     for root, dirs, files in os.walk(path):
-        files_list.append(root)
         for one_file in files:
             files_list.append(f'{os.path.join(root, one_file)}')
     return '<br/>'.join(files_list)
