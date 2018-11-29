@@ -1,4 +1,5 @@
 import arrow
+from decimal import Decimal
 
 class Loan:
     """Simple bank loan representation."""
@@ -8,9 +9,9 @@ class Loan:
 
         Parameters
         ----------
-        amount : float
+        amount : float or numeric string
             The amount of borrowed money.
-        interest : float
+        interest : float or numeric string
             Interest rate per annum, expressed as a fraction, not a percent
         starts_on : string (optional)
             First day of the loan period, default is the current day. If supplied
@@ -23,14 +24,16 @@ class Loan:
         Exceptions
         ----------
         TypeError
-            Raised when arguments: amount and/or interest are not numbers.
+            Raised when arguments: amount and/or interest are not numbers nor
+            numeric strings
         arrow.parser.ParserError
             Raised when the argument: starts_on does not conform to specified
             format.        
         """
 
-        self.amount = amount
-        self.interest = interest
+        self.amount = Decimal(str(amount))
+        self.interest = Decimal(str(interest))
+        # mixing Decimals with integers is OK
         self.daily_interest = self.interest * self.amount / 365
         if starts_on is None:
             self.starts_on = arrow.now().floor('day')
@@ -61,7 +64,8 @@ class Loan:
         """
 
         days = (arrow.get(ends_on, 'YYYY-MM-DD') - self.starts_on).days
-        return 0 if days < 0 else self.daily_interest * days + self.amount
+        return (0.0 if days < 0 else 
+                float(round(self.daily_interest * days + self.amount, 2)))
 
     def total_on_each(self, starts_on, ends_on):
         """Calculates amount owed for every day within given period.
@@ -93,8 +97,9 @@ class Loan:
         days = (starts_on - self.starts_on).days
         period = (ends_on - starts_on).days
         return [(starts_on.shift(days = i).format(fmt = 'D MMM YYYY'), 
-                0 if days + i < 0 else self.daily_interest * (days + i) +
-                self.amount) for i in range(period + 1)]
+                0.0 if days + i < 0 else 
+                float(round(self.daily_interest * (days + i) + self.amount, 2)))
+                for i in range(period + 1)]
 
 
         
